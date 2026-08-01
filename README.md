@@ -2,6 +2,7 @@
 
 **Region:** us-east-1 · **Compute:** serverless (Lambda)
 **Team:** Yamini Ravi & Meenakshy Kattungal Roshan · **Team account:** Yamini Ravi's Lab
+Website URL: http://capstone-ui-f75c3bdb.s3-website-us-east-1.amazonaws.com/
 
 ---
 
