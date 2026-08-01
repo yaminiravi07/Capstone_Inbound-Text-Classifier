@@ -1,6 +1,6 @@
 # Capstone — Inbound Text Classifier & Alerting Service
 
-**Course:** BST-CS4BD-07 · **Region:** us-east-1 · **Compute:** serverless (Lambda)
+**Region:** us-east-1 · **Compute:** serverless (Lambda)
 **Team:** Yamini Ravi & Meenakshy Kattungal Roshan · **Team account:** Yamini Ravi's Lab
 
 ---
