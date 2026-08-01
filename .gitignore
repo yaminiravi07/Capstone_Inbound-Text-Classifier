@@ -1,0 +1,15 @@
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.*
+build/
+*.zip
+out.json
+src/vaderSentiment/
+src/*.dist-info/
+src/bin/
+src/certifi*
+src/charset*
+src/idna*
+src/requests*
+src/urllib3*

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ticket Triage &middot; Capstone</title>
+<style>
+  :root {
+    --ink: #1c2b2d;
+    --paper: #f4efe4;
+    --paper-line: #e6dcc8;
+    --rule: #c9bda3;
+    --stamp-red: #b23a34;
+    --stamp-green: #2f6d4f;
+    --stamp-grey: #6b6250;
+    --accent: #14504a;
+    --accent-soft: #d7e5e0;
+    --amber: #b8860b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', 'Georgia', serif;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.02) 1px, transparent 1px) 0 0 / 100% 30px,
+      var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 20px 80px;
+  }
+  .desk { width: 100%; max-width: 640px; }
+
+  /* header */
+  .masthead {
+    border-bottom: 3px double var(--ink);
+    padding-bottom: 14px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .masthead h1 {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .masthead .sub {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--stamp-grey);
+  }
+  .tagline {
+    font-size: 13.5px;
+    font-style: italic;
+    color: var(--stamp-grey);
+    margin: 10px 0 26px;
+  }
+
+  /* config strip */
+  .config {
+    background: rgba(255,255,255,0.4);
+    border: 1px solid var(--paper-line);
+    border-radius: 4px;
+    padding: 12px 14px;
+    margin-bottom: 22px;
+  }
+  .config summary {
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    user-select: none;
+  }
+  .config .fields { margin-top: 14px; display: grid; gap: 12px; }
+  .config label {
+    display: block;
+    font-family: 'Courier New', monospace;
+    font-size: 10.5px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--stamp-grey);
+    margin-bottom: 4px;
+  }
+  .config input {
+    width: 100%;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    padding: 8px 10px;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: #fffdf8;
+    color: var(--ink);
+  }
+  .config input:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
+
+  /* the form card */
+  .card {
+    position: relative;
+    background: #fffdf8;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 26px 24px 24px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04), 0 14px 30px -22px rgba(28,43,45,0.5);
+  }
+  .card::before {
+    content: "TICKET";
+    position: absolute;
+    top: -11px; left: 22px;
+    background: var(--accent);
+    color: #fffdf8;
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    padding: 3px 10px;
+    border-radius: 2px;
+  }
+  .field-label {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--stamp-grey);
+    margin-bottom: 8px;
+    display: block;
+  }
+  textarea {
+    width: 100%;
+    min-height: 120px;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 1.55;
+    padding: 12px 14px;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background:
+      repeating-linear-gradient(transparent, transparent 27px, var(--paper-line) 27px, var(--paper-line) 28px);
+    color: var(--ink);
+  }
+  textarea:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
+
+  .examples { margin: 14px 0 4px; display: flex; flex-wrap: wrap; gap: 7px; }
+  .chip {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 1px dashed var(--rule);
+    border-radius: 12px;
+    background: transparent;
+    color: var(--stamp-grey);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .chip:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+  .submit-row { margin-top: 20px; display: flex; align-items: center; gap: 14px; }
+  button.process {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 3px;
+    background: var(--accent);
+    color: #fffdf8;
+    cursor: pointer;
+    transition: transform 0.1s, background 0.2s;
+  }
+  button.process:hover { background: #0f3d38; }
+  button.process:active { transform: translateY(1px); }
+  button.process:disabled { background: var(--stamp-grey); cursor: wait; opacity: 0.7; }
+  .hint { font-size: 12px; color: var(--stamp-grey); font-style: italic; }
+
+  /* result stamp */
+  .result { margin-top: 26px; display: none; }
+  .result.show { display: block; animation: drop 0.35s cubic-bezier(.2,.8,.3,1.2); }
+  @keyframes drop {
+    from { opacity: 0; transform: translateY(-8px) rotate(-1deg); }
+    to { opacity: 1; transform: none; }
+  }
+  .verdict {
+    position: relative;
+    border: 3px solid var(--stamp-grey);
+    border-radius: 6px;
+    padding: 18px 20px;
+    background: #fffdf8;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .verdict.NEGATIVE { border-color: var(--stamp-red); }
+  .verdict.POSITIVE { border-color: var(--stamp-green); }
+  .verdict.NEUTRAL  { border-color: var(--stamp-grey); }
+  .stamp {
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 1px;
+    padding: 8px 14px;
+    border: 2.5px solid currentColor;
+    border-radius: 4px;
+    transform: rotate(-6deg);
+    white-space: nowrap;
+  }
+  .verdict.NEGATIVE .stamp { color: var(--stamp-red); }
+  .verdict.POSITIVE .stamp { color: var(--stamp-green); }
+  .verdict.NEUTRAL  .stamp { color: var(--stamp-grey); }
+  .verdict-body { flex: 1; }
+  .verdict-body .score {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: var(--stamp-grey);
+    letter-spacing: 0.5px;
+  }
+  .verdict-body .routing {
+    font-size: 14px;
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+  .routing .fired { color: var(--stamp-red); font-weight: 700; }
+  .routing .silent { color: var(--stamp-green); font-weight: 700; }
+  .meta {
+    margin-top: 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: var(--stamp-grey);
+    letter-spacing: 0.5px;
+    word-break: break-all;
+  }
+
+  /* error */
+  .error {
+    margin-top: 22px;
+    display: none;
+    border-left: 4px solid var(--stamp-red);
+    background: #fbeae8;
+    padding: 14px 16px;
+    border-radius: 0 4px 4px 0;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .error.show { display: block; }
+  .error strong { font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--stamp-red); display: block; margin-bottom: 5px; }
+  .error code { background: rgba(0,0,0,0.06); padding: 1px 5px; border-radius: 3px; font-size: 12.5px; }
+
+  footer {
+    margin-top: 30px;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    font-size: 10.5px;
+    letter-spacing: 1px;
+    color: var(--rule);
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="desk">
+
+  <div class="masthead">
+    <h1>Ticket Triage</h1>
+    <span class="sub">Support Desk &middot; Console</span>
+  </div>
+  <p class="tagline">Submit a customer message. It is classified, filed, and &mdash; if it's a complaint &mdash; escalated.</p>
+
+  <details class="config" id="config">
+    <summary>Endpoint settings</summary>
+    <div class="fields">
+      <div>
+        <label for="url">Service URL (invoke_url)</label>
+        <input id="url" type="text" placeholder="https://xxxx.execute-api.us-east-1.amazonaws.com/notify" autocomplete="off">
+      </div>
+      <div>
+        <label for="key">API key (x-api-key)</label>
+        <input id="key" type="text" placeholder="your-api-key" autocomplete="off">
+      </div>
+    </div>
+  </details>
+
+  <div class="card">
+    <label class="field-label" for="text">Customer message</label>
+    <textarea id="text" placeholder="Type a support ticket or review here&hellip;"></textarea>
+
+    <div class="examples">
+      <button class="chip" data-fill="This is completely broken and I want a refund, worst experience ever">try: angry</button>
+      <button class="chip" data-fill="Amazing product, I love it, works perfectly!">try: happy</button>
+      <button class="chip" data-fill="The package arrived on Tuesday at 3pm.">try: neutral</button>
+    </div>
+
+    <div class="submit-row">
+      <button class="process" id="go">Process ticket</button>
+      <span class="hint">Ctrl + Enter to send</span>
+    </div>
+
+    <div class="result" id="result">
+      <div class="verdict" id="verdict">
+        <div class="stamp" id="stamp">&mdash;</div>
+        <div class="verdict-body">
+          <div class="score" id="score"></div>
+          <div class="routing" id="routing"></div>
+        </div>
+      </div>
+      <div class="meta" id="meta"></div>
+    </div>
+
+    <div class="error" id="error"></div>
+  </div>
+
+  <footer>Capstone &middot; API Gateway &rarr; Lambda &rarr; VADER &rarr; DynamoDB &rarr; SNS fan-out</footer>
+</div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const urlEl = $('url'), keyEl = $('key'), textEl = $('text');
+  const go = $('go'), resultEl = $('result'), errorEl = $('error');
+
+  // chips fill the textarea
+  document.querySelectorAll('.chip').forEach(c => {
+    c.addEventListener('click', () => { textEl.value = c.dataset.fill; textEl.focus(); });
+  });
+
+  textEl.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') submit();
+  });
+  go.addEventListener('click', submit);
+
+  function showError(title, msg) {
+    resultEl.classList.remove('show');
+    errorEl.innerHTML = '<strong>' + title + '</strong>' + msg;
+    errorEl.classList.add('show');
+  }
+
+  async function submit() {
+    const url = urlEl.value.trim();
+    const key = keyEl.value.trim();
+    const text = textEl.value.trim();
+
+    errorEl.classList.remove('show');
+    resultEl.classList.remove('show');
+
+    if (!url) { $('config').open = true; showError('Missing URL', 'Enter your service URL in Endpoint settings above.'); return; }
+    if (!key) { $('config').open = true; showError('Missing API key', 'Enter your API key in Endpoint settings above.'); return; }
+    if (!text) { showError('Empty ticket', 'Type a customer message first.'); return; }
+
+    go.disabled = true;
+    go.textContent = 'Processing\u2026';
+
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': key },
+        body: JSON.stringify({ text })
+      });
+
+      if (res.status === 403) {
+        showError('Rejected \u2014 403 Forbidden', 'The API key was missing or wrong. Check the key in Endpoint settings.');
+        return;
+      }
+
+      const raw = await res.text();
+      let data;
+      try { data = JSON.parse(raw); } catch { data = null; }
+      if (!data || !data.sentiment) {
+        showError('Unexpected response', 'Server said: <code>' + raw.slice(0, 200) + '</code>');
+        return;
+      }
+
+      render(data);
+    } catch (err) {
+      showError('Could not reach the service', 
+        'This is usually a CORS block (the browser won\u2019t let this page call the API) or an expired lab session. ' +
+        'Message: <code>' + err.message + '</code>');
+    } finally {
+      go.disabled = false;
+      go.textContent = 'Process ticket';
+    }
+  }
+
+  function render(data) {
+    const s = (data.sentiment || 'NEUTRAL').toUpperCase();
+    const verdict = $('verdict');
+    verdict.className = 'verdict ' + s;
+    $('stamp').textContent = s;
+    $('score').textContent = 'VADER compound score: ' + data.compound;
+
+    const alerted = data.telegram_alert_sent || data.published_to_sns;
+    if (s === 'NEGATIVE' && alerted) {
+      $('routing').innerHTML = 'Filed to DynamoDB. <span class="fired">Escalated</span> &mdash; alert fanned out to email, Telegram &amp; archival.';
+    } else {
+      $('routing').innerHTML = 'Filed to DynamoDB. <span class="silent">No escalation</span> &mdash; not a complaint, so no alert sent.';
+    }
+
+    $('meta').textContent = 'ticketId ' + (data.ticketId || '\u2014') + '  \u00B7  stored: ' + (data.stored ? 'yes' : 'no');
+    resultEl.classList.add('show');
+  }
+</script>
+</body>
+</html>
