@@ -12,9 +12,11 @@
 M.Sc. Artificial Intelligence capstone project, SRH University (2026)
 **Team:** Yamini Ravi & Meenakshy Kattungal Roshan
 
-<!-- Add a screenshot of the Ticket Triage UI and one of a Telegram alert here, e.g.:
-![Ticket Triage UI](docs/ui.png)
--->
+   🔗 **UI demo:** https://yaminiravi07.github.io/Capstone_Inbound-Text-Classifier/
+
+   > **Note:** The backend (API Gateway, Lambda, DynamoDB, SNS) was deployed in an AWS Academy Learner Lab, which has since been shut down. The page loads, but submitting a ticket won't return a result. To run the full pipeline, deploy it yourself with the steps under [Deploy it yourself](#deploy-it-yourself).
+
+   ![Ticket Triage UI](ui.png)
 
 ---
 
