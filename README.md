@@ -10,6 +10,7 @@
 ![Telegram](https://img.shields.io/badge/Telegram-Bot%20API-26A5E4?logo=telegram&logoColor=white)
 
 M.Sc. Artificial Intelligence capstone project, SRH University (2026)
+
 **Team:** Yamini Ravi & Meenakshy Kattungal Roshan
 
    🔗 **UI demo:** https://yaminiravi07.github.io/Capstone_Inbound-Text-Classifier/
