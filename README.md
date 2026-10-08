@@ -9,7 +9,7 @@
 ![SNS](https://img.shields.io/badge/AWS-SNS-FF4F8B?logo=amazonsqs&logoColor=white)
 ![Telegram](https://img.shields.io/badge/Telegram-Bot%20API-26A5E4?logo=telegram&logoColor=white)
 
-M.Sc. Artificial Intelligence capstone project, SRH University (2026)
+Capstone project for the Cloud Solutions course, M.Sc. Computer Science (Cybersecurity), SRH University (2026)
 
 **Team:** Yamini Ravi & Meenakshy Kattungal Roshan
 
