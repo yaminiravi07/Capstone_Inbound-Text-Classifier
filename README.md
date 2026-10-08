@@ -162,3 +162,7 @@ aws logs tail /aws/lambda/capstone-archival-fn --region us-east-1 --since 10m
 ## Security notes
 
 No credentials are in this repository. Do not commit `.terraform/`, `terraform.tfstate*`, `build/`, or the bundled `src/vaderSentiment/` folder (all in `.gitignore`).
+
+🔗 **UI demo:** https://yaminiravi07.github.io/Capstone_Inbound-Text-Classifier/ticket-triage.html
+
+> **Note:** The backend (API Gateway, Lambda, DynamoDB, SNS) was deployed in an AWS Academy Learner Lab, which has since been shut down. The page loads, but submitting a ticket won't return a result. To run the full pipeline, deploy it yourself with the steps under [Deploy it yourself](#deploy-it-yourself).
